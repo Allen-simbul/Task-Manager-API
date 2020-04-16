@@ -2,8 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const Task = require('../models/task');
 
-// Tasks
-
+// Create a new Tasks
 router.post('/tasks', async (req, res) => {
   const task = new Task(req.body);
 
@@ -15,6 +14,7 @@ router.post('/tasks', async (req, res) => {
   }
 });
 
+// Read ALL Tasks
 router.get('/tasks', async (req, res) => {
   try {
     const tasks = await Task.find({});
@@ -24,6 +24,7 @@ router.get('/tasks', async (req, res) => {
   }
 });
 
+// Read ONE task via db id
 router.get('/tasks/:id', async (req, res) => {
   const _id = req.params.id;
 
@@ -38,6 +39,7 @@ router.get('/tasks/:id', async (req, res) => {
   }
 });
 
+// Update field of a task
 router.patch('/tasks/:id', async (req, res) => {
   const _id = req.params.id;
   const updates = Object.keys(req.body);
@@ -51,10 +53,11 @@ router.patch('/tasks/:id', async (req, res) => {
   }
 
   try {
-    const task = await Task.findByIdAndUpdate(_id, req.body, {
-      new: true,
-      runValidators: true,
+    const task = await Task.findById(_id);
+    updates.forEach((update) => {
+      task[update] = req.body[update];
     });
+    await task.save();
     if (!task) {
       return res.status(404).send();
     }
@@ -64,6 +67,7 @@ router.patch('/tasks/:id', async (req, res) => {
   }
 });
 
+// Delete a task
 router.delete('/tasks/:id', async (req, res) => {
   const _id = req.params.id;
 
