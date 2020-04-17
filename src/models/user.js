@@ -68,6 +68,12 @@ userSchema.methods.toJSON = function () {
   return userObject;
 };
 
+userSchema.virtual('tasks', {
+  ref: 'Tasks',
+  localField: '_id',
+  foreignField: 'creator',
+});
+
 // returns a JWT when they login / signup - works with one specific user
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
