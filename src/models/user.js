@@ -57,6 +57,17 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+// returns a users PUBLIC data
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.password;
+  delete userObject.tokens;
+
+  return userObject;
+};
+
 // returns a JWT when they login / signup - works with one specific user
 userSchema.methods.generateAuthToken = async function () {
   const user = this;

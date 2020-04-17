@@ -59,7 +59,7 @@ router.get('/users/me', auth, async (req, res) => {
   res.send(req.user);
 });
 
-// Read ONE Uservia db id
+// Read ONE User via db id
 router.get('/users/:id', async (req, res) => {
   const _id = req.params.id;
 
